@@ -1,3 +1,4 @@
+// Project List page - added header comment for commit tracking
 import { useEffect, useState } from 'react';
 import {
   getProjects,
