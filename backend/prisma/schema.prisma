@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Status {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+}
+
+model User {
+  id              String    @id @default(uuid())
+  name            String
+  email           String    @unique
+  password        String
+  role            Role      @default(MEMBER)
+  createdAt       DateTime  @default(now())
+
+  // Relations
+  createdProjects Project[] @relation("ProjectCreator")
+  projects        Project[] @relation("ProjectMembers")
+  createdTasks    Task[]    @relation("TaskCreator")
+  assignedTasks   Task[]    @relation("TaskAssignee")
+}
+
+model Project {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  createdBy   String
+  creator     User      @relation("ProjectCreator", fields: [createdBy], references: [id])
+  members     User[]    @relation("ProjectMembers")
+  tasks       Task[]
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  priority    Priority  @default(MEDIUM)
+  status      Status    @default(TODO)
+  dueDate     DateTime?
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  createdBy   String
+  creator     User      @relation("TaskCreator", fields: [createdBy], references: [id])
+  
+  assignedTo  String?
+  assignee    User?     @relation("TaskAssignee", fields: [assignedTo], references: [id])
+}
