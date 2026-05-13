@@ -45,7 +45,7 @@ const Profile = () => {
         </div>
 
         <div className="card">
-          <h3 style={{ fontSize: 13.5, fontWeight: 600, marginBottom: 16, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', fontSize: 11 }}>
+          <h3 style={{ fontWeight: 600, marginBottom: 16, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', fontSize: 11 }}>
             Account Details
           </h3>
           {fields.map((f) => (
