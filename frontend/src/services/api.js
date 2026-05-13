@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+const backendUrl = import.meta.env.VITE_API_URL;
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: backendUrl 
+    ? (backendUrl.endsWith('/api') ? backendUrl : `${backendUrl.replace(/\/+$/, '')}/api`)
+    : '/api',
 });
 
 // Attach JWT token to every request
